@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/home_page.dart';
 import 'package:first/utility_pages//signup.dart';
 import 'package:first/utility_pages/auth_gate.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' show log;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -93,11 +93,18 @@ class _LoginPageState extends State<LoginPage> {
                     }on FirebaseAuthException catch (e){
                       if(e.code=='invalid-credential'){
                         // print("Invalid Email/Password");
-                      print("Invalid Email/Password");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Invalid! Email or Password"))
+                        );
+                      log("Invalid Email/Password");
                       }else if(e.code=="invalid-email"){
-                        print("Incorrect email format");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Invalid Email format"))
+                        );
                       }else{
-                        print("Login Failed! Try Again");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Log in Failed! Try Again"))
+                        );
                       }
                     }
 
