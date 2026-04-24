@@ -10,21 +10,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  void checkEmailVerification(){
-    final user=FirebaseAuth.instance.currentUser;
-    print("Current user: $user");
-    if(user?.emailVerified ?? false){
-      print("Email verified");
-    }else{
-      print("Email not verified");
-    }
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    checkEmailVerification();
   }
 
   @override

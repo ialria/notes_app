@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/views/login_page.dart';
+import 'package:first/utility_pages/login_page.dart';
+import 'package:first/utility_pages/verify_email.dart';
 import 'package:flutter/material.dart';
 
 class SingupPage extends StatefulWidget {
@@ -96,8 +97,9 @@ class _SingupPageState extends State<SingupPage> {
                               borderRadius: BorderRadius.circular(12)
                           ),
 
-                        )
-                    );
+                        ));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VerifyEmail()));
+
                   }on FirebaseAuthException catch (e){
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(e.message ?? "Error occured!")));

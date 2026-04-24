@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/home_page.dart';
-import 'package:first/views/signup.dart';
+import 'package:first/utility_pages//signup.dart';
+import 'package:first/utility_pages/auth_gate.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -87,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                           .signInWithEmailAndPassword(
                           email: email, password: password);
 
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomePage()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AuthGate()));
 
                     }on FirebaseAuthException catch (e){
                       if(e.code=='invalid-credential'){

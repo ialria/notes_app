@@ -1,5 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:first/views/login_page.dart';
+import 'package:first/utility_pages/auth_gate.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 
@@ -7,7 +7,6 @@ void main()async{
   WidgetsFlutterBinding.ensureInitialized();
  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-
   );
   runApp(MyApp());
 }
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title:"Register app",
-        home: LoginPage()
+        home:AuthGate()
     );
   }
 }
