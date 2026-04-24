@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/constants/routes.dart';
 import 'package:first/utility_pages/login_page.dart';
 import 'package:first/utility_pages/verify_email.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +99,7 @@ class _SingupPageState extends State<SingupPage> {
                           ),
 
                         ));
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VerifyEmail()));
+                      Navigator.of(context).pushNamed(verifyEmailRoute);
 
                   }on FirebaseAuthException catch (e){
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -116,7 +117,7 @@ class _SingupPageState extends State<SingupPage> {
                 children: [
                 Text("Already a user?",  style: TextStyle(fontSize: 18)),
                 TextButton(onPressed: (){
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>LoginPage()));
+                Navigator.of(context).pushNamed(loginRoute);
                 }, child: Text("Login",  style: TextStyle(fontSize: 18)))
 
               ],)

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/constants/routes.dart';
 import 'package:first/utility_pages//signup.dart';
 import 'package:first/utility_pages/auth_gate.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text("New user?",
                     style: TextStyle(fontSize: 18),),
                     TextButton(onPressed: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SingupPage()));
+                      Navigator.of(context).pushNamed(signupRoute);
                     }, child:Text("Signup" , style: TextStyle(fontSize: 18)))
                   ],
                 )

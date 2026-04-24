@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/constants/routes.dart';
 import 'package:first/utility_pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' show log;
@@ -48,7 +49,7 @@ class _HomePageState extends State<HomePage> {
               final shouldLogout=await showLogoutDialog(context);
               if(shouldLogout){
                 FirebaseAuth.instance.signOut();
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder:(_)=>LoginPage()),(route)=>false);
+                Navigator.of(context).pushNamedAndRemoveUntil(loginRoute,(route)=>false);
               }
               log(shouldLogout.toString());
             },

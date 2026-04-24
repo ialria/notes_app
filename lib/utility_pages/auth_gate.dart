@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/constants/routes.dart';
 import 'package:first/home_page.dart';
 import 'package:first/utility_pages/login_page.dart';
 import 'package:first/utility_pages/verify_email.dart';
@@ -24,12 +25,12 @@ class _AuthGateState extends State<AuthGate> {
     await FirebaseAuth.instance.currentUser?.reload();
     final user=FirebaseAuth.instance.currentUser;
     if(user==null){
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage(),));
+      Navigator.of(context).pushNamed(loginRoute,);
     }else{
       if(!user.emailVerified){
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => VerifyEmail(),));
+        Navigator.of(context).pushReplacementNamed(verifyEmailRoute);
       }else
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+        Navigator.of(context).pushReplacementNamed(homePageRoute);
 
     }
 
