@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/constants/routes.dart';
 import 'package:first/utility_pages/login_page.dart';
+import 'package:first/utility_pages/show_error_dialog.dart';
 import 'package:first/utility_pages/verify_email.dart';
 import 'package:flutter/material.dart';
 
@@ -102,8 +103,7 @@ class _SingupPageState extends State<SingupPage> {
                       Navigator.of(context).pushNamed(verifyEmailRoute);
 
                   }on FirebaseAuthException catch (e){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(e.message ?? "Error occured!")));
+                  await show_ErrorDialog(context, e.code);
                   }
                 }, child: Text("Sign up"),
                   style: FilledButton.styleFrom(
