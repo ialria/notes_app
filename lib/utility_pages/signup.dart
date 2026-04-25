@@ -1,18 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/constants/routes.dart';
-import 'package:first/utility_pages/login_page.dart';
 import 'package:first/utility_pages/show_error_dialog.dart';
-import 'package:first/utility_pages/verify_email.dart';
 import 'package:flutter/material.dart';
 
-class SingupPage extends StatefulWidget {
-  const SingupPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<SingupPage> createState() => _SingupPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _SingupPageState extends State<SingupPage> {
+class _SignupPageState extends State<SignupPage> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   bool isPasswordHidden = true;
@@ -77,11 +75,14 @@ class _SingupPageState extends State<SingupPage> {
                   final email = _emailController.text.trim();
                   final password = _passwordController.text.trim();
                   if(password.length < 6){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Password must be at leat 6 characters.")));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Password must be at leat 6 characters."),
+                    behavior: SnackBarBehavior.floating,),
+                    );
                     return ;
                   }
                   if(email.isEmpty || password.isEmpty){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Email and password required!")));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Email and password required!"),
+                    behavior: SnackBarBehavior.floating,));
                     return ;
                   }
 
@@ -89,6 +90,7 @@ class _SingupPageState extends State<SingupPage> {
                     final userCredentials = await FirebaseAuth.instance
                         .createUserWithEmailAndPassword(
                         email: email, password: password);
+                    // print(userCredentials);
 
                     ScaffoldMessenger.of(context).showSnackBar(
 

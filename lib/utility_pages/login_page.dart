@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/constants/routes.dart';
-import 'package:first/utility_pages//signup.dart';
 import 'package:first/utility_pages/auth_gate.dart';
 import 'package:first/utility_pages/show_error_dialog.dart';
 import 'package:flutter/material.dart';
@@ -104,6 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                         await show_ErrorDialog(context, "Invalid Email format");
 
                       }else{
+                        // generic exception
                         await show_ErrorDialog(context, "Login Failed! Try Again");
 
                       }

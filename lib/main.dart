@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         loginRoute: (context)=>const LoginPage(),
-        signupRoute: (context)=>const SingupPage(),
+        signupRoute: (context)=>const SignupPage(),
         homePageRoute: (context)=>const HomePage(),
         authGateRoute: (context)=>const AuthGate(),
         verifyEmailRoute: (context)=>const VerifyEmail(),
