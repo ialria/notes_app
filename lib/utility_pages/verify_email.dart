@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/auth/auth_service.dart';
 import 'package:first/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -12,27 +12,23 @@ class VerifyEmail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(onPressed: ()async{
-              await FirebaseAuth.instance.currentUser?.reload();
-              final user=FirebaseAuth.instance.currentUser;
-              if(user!=null && user.emailVerified){
+              final user=AuthService.firebase().currentUser;
+              if(user!=null && user.isEmailVerified){
 Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage(),));
               }
               else{
-               await user?.sendEmailVerification();
-               ScaffoldMessenger.of(context).showSnackBar(
-                 SnackBar(content: Text("Verification email sent")),
-               );
+             AuthService.firebase().sendEmailVerification();
               }
             }, child: Text("Verify Email",style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.w700
             ),)),
 TextButton.icon(onPressed: ()async{
-  await FirebaseAuth.instance.currentUser?.reload();
 
-  final user = FirebaseAuth.instance.currentUser;
+  final user=AuthService.firebase().currentUser;
+  final isVerified=user?.isEmailVerified ?? false;
 
-  if(user != null && user.emailVerified){
+  if(isVerified){
 
     Navigator.pushReplacement(
       context,

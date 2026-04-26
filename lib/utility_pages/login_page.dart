@@ -1,9 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/auth/auth_exceptions.dart';
+import 'package:first/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
 import 'package:first/utility_pages/auth_gate.dart';
 import 'package:first/utility_pages/show_error_dialog.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' show log;
+// import 'dart:developer' show log;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -85,29 +86,29 @@ class _LoginPageState extends State<LoginPage> {
                     }
 
                     try {
-                      final userCredentials = await FirebaseAuth.instance
-                          .signInWithEmailAndPassword(
-                          email: email, password: password);
 
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AuthGate()));
+                     final user=AuthService.firebase().currentUser;
+                     if(user!=null){
+                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AuthGate()));
+                     }
 
-                    }on FirebaseAuthException catch (e){
-                      if(e.code=='invalid-credential'){
-                      //   // print("Invalid Email/Password");
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //       SnackBar(content: Text("Invalid! Email or Password"))
-                      //   );
-                      // log("Invalid Email/Password");
-                        await show_ErrorDialog(context, "Invalid Email/Password");
-                      }else if(e.code=="invalid-email"){
-                        await show_ErrorDialog(context, "Invalid Email format");
 
-                      }else{
-                        // generic exception
-                        await show_ErrorDialog(context, "Login Failed! Try Again");
+                    }on InvalidAuthException{
+                      // if(e.code=='invalid-credential'){
+                        //   // print("Invalid Email/Password");
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //       SnackBar(content: Text("Invalid! Email or Password"))
+                        //   );
+                        // log("Invalid Email/Password");
+                      await show_ErrorDialog(context, "Invalid Email/Password");
 
-                      }
+                    }on InvalidEmailAuthException {
+                      await show_ErrorDialog(context, "Invalid Email format");
+                    }on GenericAuthException {
+                      await show_ErrorDialog(
+                          context, "Authentication Error!\nLogin Failed. Try Again");
                     }
+
 
 
                   }, child: Text("Login"),

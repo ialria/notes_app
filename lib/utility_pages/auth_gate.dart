@@ -1,8 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/constants/routes.dart';
-import 'package:first/home_page.dart';
-import 'package:first/utility_pages/login_page.dart';
-import 'package:first/utility_pages/verify_email.dart';
 import 'package:flutter/material.dart';
 
 class AuthGate extends StatefulWidget {
