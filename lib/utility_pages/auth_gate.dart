@@ -25,6 +25,7 @@ class _AuthGateState extends State<AuthGate> {
       Navigator.of(context).pushNamed(loginRoute,);
     }else{
       if(!user.emailVerified){
+
         Navigator.of(context).pushReplacementNamed(verifyEmailRoute);
       }else
         Navigator.of(context).pushReplacementNamed(homePageRoute);

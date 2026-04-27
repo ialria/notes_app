@@ -9,8 +9,10 @@ import 'package:flutter/material.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
-AuthService.firebase().initialize();
+await  AuthService.firebase().initialize();
+
   runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -18,6 +20,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Main APP working");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
