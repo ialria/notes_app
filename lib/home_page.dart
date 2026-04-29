@@ -1,4 +1,4 @@
-import 'package:first/auth/auth_service.dart';
+import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' show log;

@@ -1,5 +1,5 @@
-import 'package:first/auth/auth_exceptions.dart';
-import 'package:first/auth/auth_service.dart';
+import 'package:first/services/auth/auth_exceptions.dart';
+import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
 import 'package:first/utility_pages/show_error_dialog.dart';
 import 'package:flutter/material.dart';

@@ -1,17 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-
-import 'package:first/auth/auth_exceptions.dart';
-import 'package:first/auth/auth_provider.dart';
-import 'package:first/auth/auth_user.dart';
+import 'package:first/services/auth/auth_exceptions.dart';
+import 'package:first/services/auth/auth_provider.dart';
+import 'package:first/services/auth/auth_user.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Mock Authenticattion', () {
+  group('Mock Authentication', () {
     final provider = MockAuthProvider();
-    test('Should not be initialiazed to begin with', () {
+    test('Should not be initialized to begin with', () {
       expect(provider.isInitialized, false);
     });
     test("Cannot logout if not initialized", () {
@@ -68,23 +64,13 @@ await provider.createUser(email: 'email', password: 'aaa');
       expect(user, isNotNull);
         expect(user!.isEmailVerified, true);
     });
-    // Future<void> sendEmailVerification() async {
-    //   if (!isInitialized) throw InvalidAuthException();
-    //   final user = _user;
-    //   if (user == null) {
-    //     throw UserNotLoggedInException();
-    //   }
-    //   await Future.delayed(Duration(seconds: 1));
-    //   final newUser = AuthUser(isEmailVerified: true);
-    //   _user = newUser;
-    // }
 
     test("User should be able to logout and login again", () async {
       await provider.initialize();
       await provider.createUser(email: '@gmail.com', password: 'aaa');
 
       await provider.logOut();
-      await provider.logIn(email: 'email', password: 'password');
+       await provider.logIn(email: 'email', password: 'password');
       final user = provider.currentUser;
       expect(user, isNotNull);
     });

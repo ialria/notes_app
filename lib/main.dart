@@ -1,4 +1,4 @@
-import 'package:first/auth/auth_service.dart';
+import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
 import 'package:first/home_page.dart';
 import 'package:first/utility_pages/auth_gate.dart';
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Main APP working");
+    // print("Main APP working");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {

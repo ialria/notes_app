@@ -1,4 +1,4 @@
-import 'package:first/auth/auth_user.dart';
+import 'package:first/services/auth/auth_user.dart';
 
 abstract class AuthProvider {
 
