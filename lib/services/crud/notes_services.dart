@@ -9,14 +9,21 @@ import 'package:first/services/crud/crud_exceptions.dart';
 class NotesServices {
   Database? _db;
   List<DatabaseNote> _notes=[];
-  final _noteStreamController=StreamController<List<DatabaseNote>>.broadcast();
-
-  Stream<List<DatabaseNote>> get allNotes=>_noteStreamController.stream;
+ late final StreamController<List<DatabaseNote>> _noteStreamController;
 
   static final NotesServices _shared=NotesServices._sharedInstance();
 
-NotesServices._sharedInstance();
-factory NotesServices()=>_shared;
+
+  NotesServices._sharedInstance(){
+    _noteStreamController=StreamController<List<DatabaseNote>>.broadcast(onListen: (){
+      _noteStreamController.sink.add(_notes);
+    });
+  }
+  factory NotesServices()=>_shared;
+  Stream<List<DatabaseNote>> get allNotes=>_noteStreamController.stream;
+
+
+
   // cacheNOtes so don't have
   // to access database for each operation
 
@@ -46,8 +53,11 @@ final allNotes=await fetchAllNotes();
     await getNote(id: note.id);
    int updateCount=await db.update(noteTable,{
       textColumn:text,
-      isSyncedWithCloudColumn:0
-    }
+      isSyncedWithCloudColumn:0,
+
+    },
+       where: 'id=?',
+       whereArgs:[note.id]
     );
    if(updateCount==0){
      throw CouldNotUpdateNote();
@@ -187,7 +197,7 @@ Future<DatabaseUser> getUser({required String email})async{
 
   Future<void> _ensureDBisOpen()async{
     try{
-      open();
+     await open();
     }on DatabaseAlreadyOpenException{
     //   cache exception and do nothing
     }
@@ -265,7 +275,7 @@ class DatabaseNote {
 
   @override
   String toString() =>
-      'Note, ID : $id , User ID : $userId, isSyncedWithCloud : $isSyncedWithCloud';
+      'Note, ID : $id , User ID : $userId, isSyncedWithCloud : $isSyncedWithCloud, Text: $text';
 
   @override
   bool operator ==(covariant DatabaseNote other) => id == other.id;
