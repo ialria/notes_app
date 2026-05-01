@@ -1,5 +1,5 @@
 import 'package:first/services/auth/auth_service.dart';
-import 'package:first/home_page.dart';
+import 'package:first/notes_view.dart';
 import 'package:flutter/material.dart';
 
 class VerifyEmail extends StatelessWidget {
@@ -14,7 +14,7 @@ class VerifyEmail extends StatelessWidget {
             TextButton(onPressed: ()async{
               final user=AuthService.firebase().currentUser;
               if(user!=null && user.isEmailVerified){
-Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage(),));
+Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotesView(),));
               }
               else{
              AuthService.firebase().sendEmailVerification();
@@ -32,7 +32,7 @@ TextButton.icon(onPressed: ()async{
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => HomePage()),
+      MaterialPageRoute(builder: (_) => NotesView()),
     );
 
   } else {
