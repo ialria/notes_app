@@ -1,5 +1,5 @@
 import 'package:first/services/auth/auth_service.dart';
-import 'package:first/notes_view.dart';
+import 'package:first/views/notes_view/notes_view.dart';
 import 'package:flutter/material.dart';
 
 class VerifyEmail extends StatelessWidget {

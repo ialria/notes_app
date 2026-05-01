@@ -1,6 +1,7 @@
 import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
-import 'package:first/notes_view.dart';
+import 'package:first/views/notes_view/new_notes-view.dart';
+import 'package:first/views/notes_view/notes_view.dart';
 import 'package:first/utility_pages/auth_gate.dart';
 import 'package:first/utility_pages/login_page.dart';
 import 'package:first/utility_pages/signup.dart';
@@ -26,9 +27,10 @@ class MyApp extends StatelessWidget {
       routes: {
         loginRoute: (context)=>const LoginPage(),
         signupRoute: (context)=>const SignupPage(),
-        homePageRoute: (context)=>const NotesView(),
+        notesRoute: (context)=>const NotesView(),
         authGateRoute: (context)=>const AuthGate(),
         verifyEmailRoute: (context)=>const VerifyEmail(),
+        newNotesRoute: (context)=>const NewNotesPage(),
       },
       title:"Register app",
         home:AuthGate()

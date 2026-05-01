@@ -1,6 +1,7 @@
 import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
 import 'package:first/services/crud/notes_services.dart';
+import 'package:first/views/notes_view/new_notes-view.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' show log;
 
@@ -60,7 +61,11 @@ class _NotesViewState extends State<NotesView> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Home"),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           actions: [
+            IconButton(onPressed: (){
+              Navigator.of(context).pushNamed(newNotesRoute);
+            }, icon: Icon(Icons.add)),
             PopupMenuButton(
               onSelected: (value) async {
                 final shouldLogout = await showLogoutDialog(context);

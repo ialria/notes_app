@@ -1,6 +1,6 @@
 const loginRoute='/login/';
 const signupRoute='/signup/';
-const homePageRoute='/homePage/';
+const notesRoute='/notes/';
 const verifyEmailRoute='/verifyEmail/';
 const authGateRoute='/authGate/';
-
+const newNotesRoute='/notes/new-note/';
