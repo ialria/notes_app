@@ -1,29 +1,13 @@
 import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
 import 'package:first/services/crud/notes_services.dart';
-import 'package:first/views/notes_view/new_notes_view.dart';
-import 'package:flutter/foundation.dart';
+import 'package:first/views/notes_view/notes_list_view.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' show log;
 
-enum MenuAction { logout }
+import '../../utility_pages/dialog/show_logout_dialog.dart';
 
-Future<bool> showLogoutDialog(BuildContext context) {
-  return showDialog<bool>(context: context, builder: (context) {
-    return AlertDialog(
-      title: Text("Log out"),
-      content: Text("Are you sure you want to Log out?"),
-      actions: [
-        OutlinedButton(onPressed: () {
-          Navigator.of(context).pop(false);
-        }, child: Text("Cancel")),
-        FilledButton(onPressed: () {
-          Navigator.of(context).pop(true);
-        }, child: Text("Logout"))
-      ],
-    );
-  },).then((value) => value ?? false,);
-}
+enum MenuAction { logout }
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -103,20 +87,10 @@ return StreamBuilder(stream: _notesServices.allNotes, builder:(context, snapshot
   }else if(snapshot.connectionState==ConnectionState.active){
     if(snapshot.hasData){
       final allNotes=snapshot.data as List<DatabaseNote>;
-    return ListView.builder(itemCount: allNotes.length,itemBuilder: (context, index) {
-      final note=allNotes[index];
-return Card(
-  margin: EdgeInsets.symmetric(horizontal: 12,vertical: 4),
-  child: ListTile(
-    title:Text(note.text,
-    maxLines: 1,
-      softWrap: true,
-      overflow: TextOverflow.ellipsis,
-    ),
-  
-  ),
-);
-    },);
+      return NotesListView(allNotes: allNotes, onDeleteNote: (note) async{
+await _notesServices.deleteNote(id: note.id);
+      },);
+
     }else{return Center(child: const Text("No data yet"),);
     }
   }else{

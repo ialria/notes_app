@@ -2,7 +2,7 @@ import 'package:first/services/auth/auth_exceptions.dart';
 import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
 import 'package:first/utility_pages/auth_gate.dart';
-import 'package:first/utility_pages/show_error_dialog.dart';
+import 'package:first/utility_pages/dialog/error_dialog.dart';
 import 'package:flutter/material.dart';
 // import 'dart:developer' show log;
 
@@ -100,13 +100,13 @@ class _LoginPageState extends State<LoginPage> {
                         //       SnackBar(content: Text("Invalid! Email or Password"))
                         //   );
                         // log("Invalid Email/Password");
-                      await show_ErrorDialog(context, "Invalid Email/Password");
+                      await showErrorDialog(context:context, text:"Invalid Email/Password");
 
                     }on InvalidEmailAuthException {
-                      await show_ErrorDialog(context, "Invalid Email format");
+                      await showErrorDialog(context:context, text:"Invalid Email format");
                     }on GenericAuthException {
-                      await show_ErrorDialog(
-                          context, "Authentication Error!\nLogin Failed. Try Again");
+                      await showErrorDialog(
+                          context: context, text:"Authentication Error!\nLogin Failed. Try Again");
                     }
 
 

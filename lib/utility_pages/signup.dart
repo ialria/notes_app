@@ -1,7 +1,7 @@
 import 'package:first/services/auth/auth_exceptions.dart';
 import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
-import 'package:first/utility_pages/show_error_dialog.dart';
+import 'package:first/utility_pages/dialog/error_dialog.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
@@ -117,7 +117,7 @@ class _SignupPageState extends State<SignupPage> {
                     );
                     Navigator.of(context).pushNamed(verifyEmailRoute);
                   } on GenericAuthException{
-                    await show_ErrorDialog(context, "Authentication Error! ");
+                    await showErrorDialog(context:context, text:"Authentication Error! ");
                   }
                 },
                 child: Text("Sign up"),
