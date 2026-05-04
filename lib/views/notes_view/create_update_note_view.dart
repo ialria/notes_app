@@ -1,21 +1,30 @@
 import 'package:first/services/auth/auth_service.dart';
 import 'package:first/services/crud/notes_services.dart';
+import 'package:first/utility_pages/generics/get_arguments.dart';
 import 'package:flutter/material.dart';
 
-class NewNotesPage extends StatefulWidget {
-  const NewNotesPage({super.key});
+class CreateUpdateNoteView extends StatefulWidget {
+  const CreateUpdateNoteView({super.key});
 
   @override
-  State<NewNotesPage> createState() => _NewNotesPageState();
+  State<CreateUpdateNoteView> createState() => _CreateUpdateNoteViewState();
 }
 
-class _NewNotesPageState extends State<NewNotesPage> {
+class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   // every time builder gets called new instance of note will be created to ensure that does not happen we create an instance of Database note and hold onto that note to keep track of it not create another one each time
   DatabaseNote? _databaseNote;
   late final NotesServices _notesServices;
   late final TextEditingController _textEditingController;
 
-  Future<DatabaseNote> createNewNote() async {
+  Future<DatabaseNote> createOrGetExistingNote(BuildContext context) async {
+    final widgetNote=context.getArguments<DatabaseNote>();
+    if(widgetNote!=null)
+      {
+        _databaseNote=widgetNote;
+        _textEditingController.text=widgetNote.text;
+       return widgetNote;
+      }
+
     final existingNote = _databaseNote;
     if (existingNote != null) {
       return existingNote;
@@ -79,11 +88,10 @@ class _NewNotesPageState extends State<NewNotesPage> {
     return Scaffold(
       appBar: AppBar(title: Text("New Note")),
       body: FutureBuilder(
-        future: createNewNote(),
+        future: createOrGetExistingNote(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-
               final note = snapshot.data as DatabaseNote;
               _databaseNote = note;
               _setUpTextControllerListener();
@@ -94,9 +102,7 @@ class _NewNotesPageState extends State<NewNotesPage> {
 
               keyboardType: TextInputType.multiline,
               maxLines: null,
-              decoration: InputDecoration(
-                  hint: Text("Start typing here...")
-              ),
+              decoration: InputDecoration(hint: Text("Start typing here...")),
             );
           } else {
             return Center(child: CircularProgressIndicator());
