@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/services/auth/auth_exceptions.dart';
 import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
@@ -86,11 +87,16 @@ class _LoginPageState extends State<LoginPage> {
                     }
 
                     try {
+                      final user=AuthService.firebase().currentUser;
+                      if(user!=null){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AuthGate()));
+                      }
+                      if(user==null)
+                        {
+                          await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
 
-                     final user=AuthService.firebase().currentUser;
-                     if(user!=null){
-                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AuthGate()));
-                     }
+                        }
+
 
 
                     }on InvalidAuthException{

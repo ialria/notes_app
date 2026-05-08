@@ -15,11 +15,14 @@ class _AuthGateState extends State<AuthGate> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _auth_gate();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _auth_gate();
+    });
   }
 
   void _auth_gate() async{
     await FirebaseAuth.instance.currentUser?.reload();
+    if(!mounted) return;
     final user=FirebaseAuth.instance.currentUser;
     if(user==null){
       Navigator.of(context).pushNamed(loginRoute,);
