@@ -1,10 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/services/auth/auth_exceptions.dart';
-import 'package:first/services/auth/auth_service.dart';
+// import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
-import 'package:first/utility_pages/auth_gate.dart';
+import 'package:first/services/auth/bloc/auth_bloc.dart';
+import 'package:first/services/auth/bloc/auth_event.dart';
+import 'package:first/services/auth/bloc/auth_state.dart';
+// import 'package:first/utility_pages/auth_gate.dart';
 import 'package:first/utility_pages/dialog/error_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'dart:developer' show log;
 
 class LoginPage extends StatefulWidget {
@@ -76,53 +80,60 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 42),
                 SizedBox(height: 48,
                   width: double.infinity,
-                  child: FilledButton(onPressed: () async {
-                    final email = _emailController.text.trim();
-                    final password = _passwordController.text.trim();
-                    if(email.isEmpty || password.isEmpty){
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Email and password required"))
-                      );
-                      return;
-                    }
+                  child: BlocListener<AuthBloc,AuthState>(
+                    listener: (context, state)async {
+if(state is AuthStateLoggedOut)
+  {
+    if(state.exception is InvalidAuthException){
+      throw showErrorDialog(context: context, text: 'User not found!');
+    }
+    else if(state.exception is InvalidEmailAuthException){
+      throw showErrorDialog(context: context, text: 'Invalid! Wrong Credentials');
+    }else if (state.exception is GenericAuthException){
+      throw showErrorDialog(context: context, text: 'Authentication Error!');
+    }
 
-                    try {
-                      final user=AuthService.firebase().currentUser;
-                      if(user!=null){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AuthGate()));
+  }
+                    },
+                    child: FilledButton(onPressed: () async {
+                      final email = _emailController.text.trim();
+                      final password = _passwordController.text.trim();
+                      if(email.isEmpty || password.isEmpty){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Email and password required"))
+                        );
+                        return;
                       }
-                      if(user==null)
-                        {
-                          await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                      context.read<AuthBloc>().add(AuthEventLogIn(email, password));
 
-                        }
-
-
-
-                    }on InvalidAuthException{
-                      // if(e.code=='invalid-credential'){
-                        //   // print("Invalid Email/Password");
-                        //   ScaffoldMessenger.of(context).showSnackBar(
-                        //       SnackBar(content: Text("Invalid! Email or Password"))
-                        //   );
-                        // log("Invalid Email/Password");
-                      await showErrorDialog(context:context, text:"Invalid Email/Password");
-
-                    }on InvalidEmailAuthException {
-                      await showErrorDialog(context:context, text:"Invalid Email format");
-                    }on GenericAuthException {
-                      await showErrorDialog(
-                          context: context, text:"Authentication Error!\nLogin Failed. Try Again");
-                    }
+                      // try {
+                      //              context.read<AuthBloc>().add(AuthEventLogIn(email, password));
+                      //
+                      // }on InvalidAuthException{
+                      //   // if(e.code=='invalid-credential'){
+                      //     //   // print("Invalid Email/Password");
+                      //     //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     //       SnackBar(content: Text("Invalid! Email or Password"))
+                      //     //   );
+                      //     // log("Invalid Email/Password");
+                      //   await showErrorDialog(context:context, text:"Invalid Email/Password");
+                      //
+                      // }on InvalidEmailAuthException {
+                      //   await showErrorDialog(context:context, text:"Invalid Email format");
+                      // }on GenericAuthException {
+                      //   await showErrorDialog(
+                      //       context: context, text:"Authentication Error!\nLogin Failed. Try Again");
+                      // }
 
 
 
-                  }, child: Text("Login"),
-                    style: FilledButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14)
-                        )
-                    ),),
+                    }, child: Text("Login"),
+                      style: FilledButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14)
+                          )
+                      ),),
+                  ),
                 ),
                 SizedBox(height: 18,),
                 Row(
