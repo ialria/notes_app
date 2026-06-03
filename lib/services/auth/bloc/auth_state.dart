@@ -5,20 +5,17 @@ import 'package:flutter/foundation.dart' show immutable;
 class AuthState{
   const AuthState();
 }
-
-class AuthStateLoading extends AuthState{
-  const AuthStateLoading();
-}
-
+ class AuthStateUninitialize extends AuthState{
+  const AuthStateUninitialize();
+ }
+ class AuthStateRegistering extends AuthState{
+  final Exception? exception;
+  const AuthStateRegistering(this.exception);
+ }
 class AuthStateLoggedIn extends AuthState{
   final AuthUser user;
   const AuthStateLoggedIn(this.user);
 }
-//
-// class AuthStateLoginFailure extends AuthState{
-//   final Exception exception;
-//   const AuthStateLoginFailure(this.exception);
-// }
 
 class AuthStateNeedsVerification extends AuthState{
   const AuthStateNeedsVerification();
@@ -29,9 +26,22 @@ class AuthStateLoggedOut extends AuthState{
   const AuthStateLoggedOut(this.exception);
 }
 
-class AuthStateLogoutFailure extends AuthState{
-  final Exception exception;
-  const AuthStateLogoutFailure(this.exception);
-}
+
+//
+// class AuthStateLoginFailure extends AuthState{
+//   final Exception exception;
+//   const AuthStateLoginFailure(this.exception);
+// }
 
 
+//
+// class AuthStateLogoutFailure extends AuthState{
+//   final Exception exception;
+//   const AuthStateLogoutFailure(this.exception);
+// }
+
+//
+// class AuthStateLoading extends AuthState{
+//   const AuthStateLoading();
+// }
+//
