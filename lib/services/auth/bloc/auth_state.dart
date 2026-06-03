@@ -27,21 +27,21 @@ class AuthStateLoggedOut extends AuthState{
 }
 
 
-//
-// class AuthStateLoginFailure extends AuthState{
-//   final Exception exception;
-//   const AuthStateLoginFailure(this.exception);
-// }
+
+class AuthStateLoginFailure extends AuthState{
+  final Exception exception;
+  const AuthStateLoginFailure(this.exception);
+}
 
 
-//
-// class AuthStateLogoutFailure extends AuthState{
-//   final Exception exception;
-//   const AuthStateLogoutFailure(this.exception);
-// }
 
-//
-// class AuthStateLoading extends AuthState{
-//   const AuthStateLoading();
-// }
-//
+class AuthStateLogoutFailure extends AuthState{
+  final Exception exception;
+  const AuthStateLogoutFailure(this.exception);
+}
+
+
+class AuthStateLoading extends AuthState{
+  const AuthStateLoading();
+}
+
