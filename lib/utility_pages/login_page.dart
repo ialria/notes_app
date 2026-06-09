@@ -3,7 +3,7 @@ import 'package:first/services/auth/bloc/auth_bloc.dart';
 import 'package:first/services/auth/bloc/auth_event.dart';
 import 'package:first/services/auth/bloc/auth_state.dart';
 import 'package:first/utility_pages/dialog/error_dialog.dart';
-import 'package:first/utility_pages/dialog/loading_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,12 +42,12 @@ if(state is AuthStateLoggedOut){
           if (state.exception is InvalidAuthException) {
             await showErrorDialog(
               context: context,
-              text: 'User not found!',
+              text: 'Invalid! Could not find any match for entered credentials',
             );
           } else if (state.exception is InvalidEmailAuthException) {
             await showErrorDialog(
               context: context,
-              text: 'Invalid! Wrong Credentials',
+              text: 'Invalid! Could not find user with entered credentials',
             );
           } else if (state.exception is GenericAuthException) {
             await showErrorDialog(
@@ -143,6 +143,13 @@ if(state is AuthStateLoggedOut){
 
                 ),
                 SizedBox(height: 18),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(onPressed: (){
+                    context.read<AuthBloc>().add(AuthEventForgotPassword());
+                  }, child: Text("Forgot Password?")),
+                ),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

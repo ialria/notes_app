@@ -57,11 +57,13 @@ class _SignupPageState extends State<SignupPage> {
             children: [
               TextField(
                 controller: _emailController,
+                autofocus: true,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(labelText: "Email"),
               ),
               SizedBox(height: 12),
               TextField(
+                autofocus: true,
                 controller: _passwordController,
                 obscureText: isPasswordHidden,
                 autocorrect: false,
@@ -154,7 +156,7 @@ context.read<AuthBloc>().add(AuthEventRegisterEvent(email: email, password: pass
                   Text("Already a user?", style: TextStyle(fontSize: 18)),
                   TextButton(
                     onPressed: () {
-                     context.read<AuthBloc>().add(AuthEventLogOut());
+                     context.read<AuthBloc>().add(AuthEventShouldLogIn());
                     },
                     child: Text("Login", style: TextStyle(fontSize: 18)),
                   ),

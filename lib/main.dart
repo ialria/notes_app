@@ -7,6 +7,7 @@ import 'package:first/services/auth/bloc/auth_event.dart';
 import 'package:first/services/auth/bloc/auth_state.dart';
 import 'package:first/services/auth/firebase_auth_provider.dart';
 import 'package:first/utility_pages/signup.dart';
+import 'package:first/views/forgot_password_view.dart';
 import 'package:first/views/notes_view/create_update_note_view.dart';
 import 'package:first/views/notes_view/notes_view.dart';
 import 'package:first/utility_pages/login_page.dart';
@@ -83,6 +84,9 @@ class _HomePageState extends State<HomePage> {
           return LoginPage();
         }else if(state is AuthStateRegistering){
           return SignupPage();
+        }
+        else if(state is AuthStateForgotPassword){
+          return const ForgotPasswordView();
         }
         else {
           return Scaffold(
