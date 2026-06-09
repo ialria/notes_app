@@ -1,14 +1,15 @@
+import 'package:first/helpers/loading/loading_screen.dart';
+import 'package:first/helpers/loading/loading_screen_controller.dart';
 import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
 import 'package:first/services/auth/bloc/auth_bloc.dart';
 import 'package:first/services/auth/bloc/auth_event.dart';
 import 'package:first/services/auth/bloc/auth_state.dart';
 import 'package:first/services/auth/firebase_auth_provider.dart';
+import 'package:first/utility_pages/signup.dart';
 import 'package:first/views/notes_view/create_update_note_view.dart';
 import 'package:first/views/notes_view/notes_view.dart';
-import 'package:first/utility_pages/auth_gate.dart';
 import 'package:first/utility_pages/login_page.dart';
-import 'package:first/utility_pages/signup.dart';
 import 'package:first/utility_pages/verify_email.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,11 +31,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // theme: ThemeData(primarySwatch: Colors.blue),
       routes: {
-        loginRoute: (context) => const LoginPage(),
-        signupRoute: (context) => const SignupPage(),
-        notesRoute: (context) => const NotesView(),
-        authGateRoute: (context) => const AuthGate(),
-        verifyEmailRoute: (context) => const VerifyEmail(),
+        // Bloc takes cares of everything
+        // loginRoute: (context) => const LoginPage(),
+        // signupRoute: (context) => const SignupPage(),
+        // notesRoute: (context) => const NotesView(),
+        // authGateRoute: (context) => const AuthGate(),
+        // verifyEmailRoute: (context) => const VerifyEmail(),
         createOrUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
       },
       title: "Register app",
@@ -58,10 +60,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     context.read<AuthBloc>().add(AuthEventInitialize());
 
-    return BlocBuilder<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if(state.isLoading){
+          LoadingScreen().show(context: context, text: state.loadingText ?? 'Please wait a moment...');
+        }else
+          {
+            LoadingScreen().hide();
+          }
+      },
       builder: (context, state) {
-        print(state.runtimeType);
-        if (state is AuthStateLoading) {
+        // print(state.runtimeType);
+        if (state is AuthStateUninitialize) {
           return Scaffold(
             body: Container(child: Center(child: CircularProgressIndicator())),
           );
@@ -71,7 +81,10 @@ class _HomePageState extends State<HomePage> {
           return VerifyEmail();
         } else if (state is AuthStateLoggedOut) {
           return LoginPage();
-        } else {
+        }else if(state is AuthStateRegistering){
+          return SignupPage();
+        }
+        else {
           return Scaffold(
             body: Center(
               child: Column(

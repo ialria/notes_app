@@ -48,7 +48,8 @@ class _NotesViewState extends State<NotesView> {
             },
             icon: Icon(Icons.add),
           ),
-          PopupMenuButton(
+          PopupMenuButton<MenuAction>(
+
             onSelected: (value) async {
               final shouldLogout = await showLogoutDialog(context);
               if (shouldLogout) {

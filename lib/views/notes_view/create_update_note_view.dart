@@ -20,20 +20,19 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   late final TextEditingController _textEditingController;
 
   Future<CloudNote> createOrGetExistingNote(BuildContext context) async {
-    final widgetNote=context.getArguments<CloudNote>();
-    if(widgetNote!=null)
-      {
-        _note=widgetNote;
-        _textEditingController.text=widgetNote.text;
-       return widgetNote;
-      }
+    final widgetNote = context.getArguments<CloudNote>();
+    if (widgetNote != null) {
+      _note = widgetNote;
+      _textEditingController.text = widgetNote.text;
+      return widgetNote;
+    }
 
     final existingNote = _note;
     if (existingNote != null) {
       return existingNote;
     }
     final user = AuthService.firebase().currentUser!;
-    final userId=user.id;
+    final userId = user.id;
     // no need to fetch user as already deal with it in firebase auth
     // final owner = await _notesServices.getUser(email: user.email);
 
@@ -91,19 +90,22 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("New Note"),
-      actions: [
-        IconButton(onPressed: ()async{
-          final text=_textEditingController.text.trim();
-          if(_note==null || text.isEmpty){
-            await showCannotShareEmptyDialog(context);
-          }
-          else{
-           await SharePlus.instance.share(ShareParams(text:text));
-
-          }
-        }, icon: const Icon(Icons.share))
-      ],),
+      appBar: AppBar(
+        title: Text("New Note"),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final text = _textEditingController.text.trim();
+              if (_note == null || text.isEmpty) {
+                await showCannotShareEmptyDialog(context);
+              } else {
+                await SharePlus.instance.share(ShareParams(text: text));
+              }
+            },
+            icon: const Icon(Icons.share),
+          ),
+        ],
+      ),
       body: FutureBuilder(
         future: createOrGetExistingNote(context),
         builder: (context, snapshot) {

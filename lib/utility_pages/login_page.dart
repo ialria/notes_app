@@ -1,15 +1,11 @@
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/services/auth/auth_exceptions.dart';
-// import 'package:first/services/auth/auth_service.dart';
-import 'package:first/constants/routes.dart';
 import 'package:first/services/auth/bloc/auth_bloc.dart';
 import 'package:first/services/auth/bloc/auth_event.dart';
 import 'package:first/services/auth/bloc/auth_state.dart';
-// import 'package:first/utility_pages/auth_gate.dart';
 import 'package:first/utility_pages/dialog/error_dialog.dart';
+import 'package:first/utility_pages/dialog/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'dart:developer' show log;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,7 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   bool isPasswordHidden = true;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -41,8 +36,29 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body:SafeArea(
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) async {
+if(state is AuthStateLoggedOut){
+          if (state.exception is InvalidAuthException) {
+            await showErrorDialog(
+              context: context,
+              text: 'User not found!',
+            );
+          } else if (state.exception is InvalidEmailAuthException) {
+            await showErrorDialog(
+              context: context,
+              text: 'Invalid! Wrong Credentials',
+            );
+          } else if (state.exception is GenericAuthException) {
+            await showErrorDialog(
+              context: context,
+              text: 'Authentication Error!',
+            );
+          }
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(32),
             child: Column(
@@ -52,9 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                 TextField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                      labelText: "Email"
-                  ),
+                  decoration: InputDecoration(labelText: "Email"),
                 ),
                 SizedBox(height: 12),
                 TextField(
@@ -63,94 +77,89 @@ class _LoginPageState extends State<LoginPage> {
                   autocorrect: false,
                   enableSuggestions: false,
                   decoration: InputDecoration(
-                      labelText: "Password",
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isPasswordHidden = !isPasswordHidden;
-                          });
-                        },
-                        icon: Icon(
-                          isPasswordHidden ? Icons.visibility_off : Icons
-                              .visibility,
-                        ),
-                      )
+                    labelText: "Password",
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isPasswordHidden = !isPasswordHidden;
+                        });
+                      },
+                      icon: Icon(
+                        isPasswordHidden
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(height: 42),
-                SizedBox(height: 48,
+                SizedBox(
+                  height: 48,
                   width: double.infinity,
-                  child: BlocListener<AuthBloc,AuthState>(
-                    listener: (context, state)async {
-if(state is AuthStateLoggedOut)
-  {
-    if(state.exception is InvalidAuthException){
-      throw showErrorDialog(context: context, text: 'User not found!');
-    }
-    else if(state.exception is InvalidEmailAuthException){
-      throw showErrorDialog(context: context, text: 'Invalid! Wrong Credentials');
-    }else if (state.exception is GenericAuthException){
-      throw showErrorDialog(context: context, text: 'Authentication Error!');
-    }
-
-  }
-                    },
-                    child: FilledButton(onPressed: () async {
-                      final email = _emailController.text.trim();
-                      final password = _passwordController.text.trim();
-                      if(email.isEmpty || password.isEmpty){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Email and password required"))
+                    // wrap button with bloc listener
+                    child: FilledButton(
+                      onPressed: (){
+                        final email = _emailController.text.trim();
+                        final password = _passwordController.text.trim();
+                        if (email.isEmpty || password.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Email and password required"),
+                            ),
+                          );
+                          return;
+                        }
+                        context.read<AuthBloc>().add(
+                          AuthEventLogIn(email, password),
                         );
-                        return;
-                      }
-                      context.read<AuthBloc>().add(AuthEventLogIn(email, password));
 
-                      // try {
-                      //              context.read<AuthBloc>().add(AuthEventLogIn(email, password));
-                      //
-                      // }on InvalidAuthException{
-                      //   // if(e.code=='invalid-credential'){
-                      //     //   // print("Invalid Email/Password");
-                      //     //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     //       SnackBar(content: Text("Invalid! Email or Password"))
-                      //     //   );
-                      //     // log("Invalid Email/Password");
-                      //   await showErrorDialog(context:context, text:"Invalid Email/Password");
-                      //
-                      // }on InvalidEmailAuthException {
-                      //   await showErrorDialog(context:context, text:"Invalid Email format");
-                      // }on GenericAuthException {
-                      //   await showErrorDialog(
-                      //       context: context, text:"Authentication Error!\nLogin Failed. Try Again");
-                      // }
+                        // try {
+                        //              context.read<AuthBloc>().add(AuthEventLogIn(email, password));
+                        //
+                        // }on InvalidAuthException{
+                        //   // if(e.code=='invalid-credential'){
+                        //     //   // print("Invalid Email/Password");
+                        //     //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     //       SnackBar(content: Text("Invalid! Email or Password"))
+                        //     //   );
+                        //     // log("Invalid Email/Password");
+                        //   await showErrorDialog(context:context, text:"Invalid Email/Password");
+                        //
+                        // }on InvalidEmailAuthException {
+                        //   await showErrorDialog(context:context, text:"Invalid Email format");
+                        // }on GenericAuthException {
+                        //   await showErrorDialog(
+                        //       context: context, text:"Authentication Error!\nLogin Failed. Try Again");
+                        // }
+                      },
 
-
-
-                    }, child: Text("Login"),
                       style: FilledButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14)
-                          )
-                      ),),
-                  ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: Text("Login"),
+                    ),
+
                 ),
-                SizedBox(height: 18,),
+                SizedBox(height: 18),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
-                    Text("New user?",
-                    style: TextStyle(fontSize: 18),),
-                    TextButton(onPressed: (){
-                      Navigator.of(context).pushNamed(signupRoute);
-                    }, child:Text("Signup" , style: TextStyle(fontSize: 18)))
+                    Text("New user?", style: TextStyle(fontSize: 18)),
+                    TextButton(
+                      onPressed: () {
+                       context.read<AuthBloc>().add(AuthEventShouldRegisterEvent());
+                      },
+                      child: Text("Signup", style: TextStyle(fontSize: 18)),
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           ),
-        )
+        ),
+      ),
     );
   }
 }
