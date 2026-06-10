@@ -106,27 +106,30 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: createOrGetExistingNote(context),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              final note = snapshot.data as CloudNote;
-              _note = note;
-              _setUpTextControllerListener();
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: FutureBuilder(
+          future: createOrGetExistingNote(context),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                final note = snapshot.data as CloudNote;
+                _note = note;
+                _setUpTextControllerListener();
+              }
+
+              return TextField(
+                controller: _textEditingController,
+
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: InputDecoration(hint: Text("Start typing here...")),
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
             }
-
-            return TextField(
-              controller: _textEditingController,
-
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              decoration: InputDecoration(hint: Text("Start typing here...")),
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+          },
+        ),
       ),
     );
   }
