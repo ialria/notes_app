@@ -1,5 +1,4 @@
 import 'package:first/helpers/loading/loading_screen.dart';
-import 'package:first/helpers/loading/loading_screen_controller.dart';
 import 'package:first/services/auth/auth_service.dart';
 import 'package:first/constants/routes.dart';
 import 'package:first/services/auth/bloc/auth_bloc.dart';
@@ -14,6 +13,7 @@ import 'package:first/utility_pages/login_page.dart';
 import 'package:first/utility_pages/verify_email.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:first/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +29,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // print("Main APP working");
     return MaterialApp(
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       debugShowCheckedModeBanner: false,
       // theme: ThemeData(primarySwatch: Colors.blue),
       routes: {
